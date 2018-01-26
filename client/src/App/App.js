@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import Home from './Home';
-import Login from './Login';
+import {
+   BrowserRouter as Router,
+   Route,
+   Link,
+   Redirect
+} from 'react-router-dom';
+import Home from './Components/Home';
+import Login from './Components/Login';
+import fakeAuth from './authentication';
+import PrivateRoute from './PrivateRoute';
+import MyProfile from './Components/MyProfile';
 
 class App extends Component {
    render() {
@@ -10,15 +18,14 @@ class App extends Component {
             <div>
                <h2>Welcome</h2>
                <ul>
-                  <li><Link to={'/'}>Home</Link></li>
-                  <li><Link to={'/Login'}>Login</Link></li>
+                  <li><Link to='/home'>Home</Link></li>
+                  <li><Link to='/my-profile'>My Profile</Link></li>
                </ul>
                <hr />
-               
-               <Switch>
-                  <Route exact path='/' component={Home} />
-                  <Route exact path='/Login' component={Login} />
-               </Switch>
+
+               <Route path='/home' component={Home} />
+               <Route path='/login' component={Login} />
+               <PrivateRoute path='/my-profile' component={MyProfile} />
             </div>
          </Router>
       );
