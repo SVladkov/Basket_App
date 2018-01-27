@@ -3,12 +3,9 @@ import axios from 'axios';
 const authentication = {
    isAuthenticated: false,
    authenticate(username, password, callback, errorCallback) {
-        axios.post('http://127.0.0.1:5000/login', {}, {
-                auth: {
-                    username: username,
-                    password: password
-                }
-            }).then((response) => {
+        axios.defaults.headers.common['Authorization'] = 'Basic ' + btoa(username + ":" + password);
+
+        axios.post('http://127.0.0.1:5000/login').then((response) => {
                 this.isAuthenticated = true;
                 callback();
             }).catch((error) => {

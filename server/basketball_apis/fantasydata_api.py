@@ -27,12 +27,11 @@ class FantasydataApi(BaseBasketballApi):
     def get_yesterday_matches(self):
         try:
             yesterday = datetime.today() - timedelta(days=1)
-            print(yesterday.day)
-            print(yesterday.month)
-            print(yesterday.year)
 
-            url = 'http://api.fantasydata.net/v3/nba/scores/JSON/GamesByDate/{}-{}-{}'.format(yesterday.year, MONTHS[yesterday.month-1], yesterday.day)
-            print(url)
+            url = 'http://api.fantasydata.net/v3/nba/scores/JSON/GamesByDate/{}-{}-{}'.format(
+                yesterday.year,
+                MONTHS[yesterday.month-1],
+                yesterday.day)
 
             url = 'http://api.fantasydata.net/v3/nba/scores/JSON/GamesByDate/2017-DEC-25'
             params = {}

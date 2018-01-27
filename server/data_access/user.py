@@ -12,3 +12,11 @@ def get_password_hash(username):
 
 def check_if_user_exists(username):
     return User.query.filter_by(username=username).first() != None
+
+def get_username_name(username):
+    return User.query.filter_by(username=username).first().name
+
+def set_username_name(username, name):
+    user = User.query.filter_by(username=username).first()
+    user.name = name
+    db.session.commit()
