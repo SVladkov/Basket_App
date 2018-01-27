@@ -1,57 +1,54 @@
 import React, { Component } from 'react';
-import {
-    Redirect,
-    Route,
-    Link,
-} from 'react-router-dom';
 import axios from 'axios';
 import Home from './Home';
-import Register from './Register';
 import authentication from '../authentication';
+import {
+   Redirect,
+   Route,
+   Link,
+} from 'react-router-dom';
 
-class Login extends React.Component {
+class Register extends React.Component {
     state = {
         redirectToReferrer: false,
         username: '',
         password: '',
-        incorrectCredentials: false
+        usernameExists: false
     }
 
-    login = () => {
-        authentication.authenticate(
+    register = () => {
+        authentication.register(
             this.state.username,
             this.state.password,
             () => {
                 this.setState(() => ({
                     redirectToReferrer: true,
-                    incorrectCredentials: false
+                    usernameExists: false
                 }))
             },
             () => {
                 this.setState(() => ({
-                    incorrectCredentials: true
+                    usernameExists: true
                 }))
             })
     }
 
     render() {
         const redirectToReferrer = this.state.redirectToReferrer;
-        const { from } = this.props.location.state || { from: { pathname: '/' } }
 
         if (redirectToReferrer === true) {
             return (
-                <Redirect to={from} />
+                <Redirect to='/login' />
             )
         }
 
         return (
             <div>
-                <p>You must login to view this page at {from.pathname}</p>
                 <input value={this.state.username} onChange={event => this.updateUsernameValue(event)} />
                 <input type='password' value={this.state.password} onChange={event => this.updatePasswordValue(event)} />
-                <button onClick={this.login}>Login</button>
-                { this.state.incorrectCredentials ? <p>Incorrect username or password.</p> : null }
-                <p>You don't have a profile? <Link to='/register'>Register</Link> now!</p>
+                <button onClick={this.register}>Register</button>
+                <p>{ this.state.usernameExists }</p>
+                { this.state.usernameExists ? <p>The username already exists. Please change it.</p> : null }
             </div>
         )
     }
@@ -68,4 +65,4 @@ class Login extends React.Component {
         });
     }
 }
-export default Login;
+export default Register;

@@ -7,8 +7,8 @@ import {
 } from 'react-router-dom';
 import Home from './Components/Home';
 import Login from './Components/Login';
-import fakeAuth from './authentication';
-import PrivateRoute from './PrivateRoute';
+import Register from './Components/Register';
+import PrivateRoute from './Components/PrivateRoute';
 import MyProfile from './Components/MyProfile';
 
 class App extends Component {
@@ -25,6 +25,7 @@ class App extends Component {
 
                <Route path='/home' component={Home} />
                <Route path='/login' component={Login} />
+               <Route path='/register' component={Register} />
                <PrivateRoute path='/my-profile' component={MyProfile} />
             </div>
          </Router>
