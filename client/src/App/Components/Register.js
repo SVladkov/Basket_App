@@ -1,11 +1,7 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import Home from './Home';
+import React from 'react';
 import authentication from '../authentication';
 import {
-   Redirect,
-   Route,
-   Link,
+   Redirect
 } from 'react-router-dom';
 
 class Register extends React.Component {
@@ -43,12 +39,12 @@ class Register extends React.Component {
         }
 
         return (
-            <div>
+            <div className="login-register-form">
                 <input value={this.state.username} onChange={event => this.updateUsernameValue(event)} />
                 <input type='password' value={this.state.password} onChange={event => this.updatePasswordValue(event)} />
                 <button onClick={this.register}>Register</button>
                 <p>{ this.state.usernameExists }</p>
-                { this.state.usernameExists ? <p>The username already exists. Please change it.</p> : null }
+                { this.state.usernameExists ? <p className="center">The username already exists. Please change it.</p> : null }
             </div>
         )
     }

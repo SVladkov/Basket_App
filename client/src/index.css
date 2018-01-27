@@ -1,0 +1,44 @@
+body {
+    background: url('./background.jpeg');
+    color: white;
+    font-family: arial;
+}
+
+a {
+    color: white;
+}
+
+.navigation {
+    display: inline;
+    margin-right: 20px
+}
+
+.login-register-form input {
+    display: block;
+    margin: 0 auto;
+}
+
+.login-register-form button {
+    display: block;
+    margin: 0 auto;
+}
+
+.logo {
+    height: 100px;
+    max-width: 100px;
+    text-align: center;
+    background-color: white;
+}
+
+.center {
+    text-align: center;
+}
+
+table {
+    margin: 0 auto;
+}
+
+td {
+    padding-left: 10px;
+    padding-right: 10px;
+}

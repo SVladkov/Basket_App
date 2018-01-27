@@ -1,12 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
     Redirect,
-    Route,
     Link,
 } from 'react-router-dom';
-import axios from 'axios';
-import Home from './Home';
-import Register from './Register';
 import authentication from '../authentication';
 
 class Login extends React.Component {
@@ -45,13 +41,12 @@ class Login extends React.Component {
         }
 
         return (
-            <div>
-                <p>You must login to view this page at {from.pathname}</p>
+            <div className="login-register-form">
                 <input value={this.state.username} onChange={event => this.updateUsernameValue(event)} />
                 <input type='password' value={this.state.password} onChange={event => this.updatePasswordValue(event)} />
                 <button onClick={this.login}>Login</button>
-                { this.state.incorrectCredentials ? <p>Incorrect username or password.</p> : null }
-                <p>You don't have a profile? <Link to='/register'>Register</Link> now!</p>
+                { this.state.incorrectCredentials ? <p className="center">Incorrect username or password.</p> : null }
+                <p className="center">You don't have a profile? <Link to='/register'>Register</Link> now!</p>
             </div>
         )
     }

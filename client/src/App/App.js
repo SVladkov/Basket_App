@@ -2,24 +2,24 @@ import React, { Component } from 'react';
 import {
    BrowserRouter as Router,
    Route,
-   Link,
-   Redirect
+   Link
 } from 'react-router-dom';
 import Home from './Components/Home';
 import Login from './Components/Login';
 import Register from './Components/Register';
 import PrivateRoute from './Components/PrivateRoute';
 import MyProfile from './Components/MyProfile';
+import '../index.css'
 
 class App extends Component {
    render() {
       return (
          <Router>
             <div>
-               <h2>Welcome</h2>
+               <h2>Basketball App</h2>
                <ul>
-                  <li><Link to='/home'>Home</Link></li>
-                  <li><Link to='/my-profile'>My Profile</Link></li>
+                  <li className="navigation"><Link to='/home'>Home</Link></li>
+                  <li className="navigation"><Link to='/my-profile'>My Profile</Link></li>
                </ul>
                <hr />
 
