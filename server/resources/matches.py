@@ -5,4 +5,12 @@ class MatchesResource(Resource):
         self.basketball_api = basketball_api()
 
     def get(self):
-        return self.basketball_api.get_yesterday_matches()
+
+        try:
+            # Raise this exception during development, so that API limit
+            # does not get exceeded
+            # raise Exception('Be careful with API limit')
+            return self.basketball_api.get_yesterday_matches()
+        except Exception as e:
+            print(e)
+            return '', 204

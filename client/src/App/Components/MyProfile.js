@@ -1,18 +1,19 @@
 import React from 'react';
 import axios from 'axios';
 import {
+    Redirect,
     withRouter
 } from 'react-router-dom'
 import authentication from '../authentication';
 
 const SignOutButton = withRouter(({ history }) => (
-   authentication.isAuthenticated === true
-      ? <p>
+    authentication.isAuthenticated === true
+        ? <p>
             <button onClick={() => {
-               authentication.signOut(() => history.push('/'))
+                authentication.signOut(() => history.push('/'))
             }}>Sign out</button>
-         </p>
-      : <p> You are not logged in. </p>
+        </p>
+        : <p> You are not logged in. </p>
 ))
 
 class MyProfile extends React.Component {
@@ -22,23 +23,43 @@ class MyProfile extends React.Component {
     }
 
     getName() {
-        axios.get('http://127.0.0.1:5000/profile')
-            .then((response) => {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', 'http://localhost:5000/profile');
+        xhr.withCredentials = true;
+        xhr.addEventListener('load', (response) => {
+            if (xhr.status === 200) {
                 this.setState(() => ({
-                    name: response.data
-                }));
-            })
+                    name: xhr.response
+                }))
+            } else if (xhr.status === 401) {
+                authentication.isAuthenticated = false;
+                this.setState(() => ({
+                    redirectToLogin: true
+                }))
+            }
+        });
+        xhr.send();
     }
 
     setName = () => {
         var newName = this.state.newName;
-        axios.post('http://127.0.0.1:5000/profile', {name: newName})
-            .then((response) => {
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:5000/profile');
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+        xhr.withCredentials = true;
+        xhr.addEventListener('load', (response) => {
+            if (xhr.status === 200) {
                 this.setState(() => ({
-                    name: newName,
-                    newName: ''
-                }));
-            })
+                    name: xhr.response
+                }))
+            } else if (xhr.status === 401) {
+                authentication.isAuthenticated = false;
+            }
+        });
+        var body = JSON.stringify({ name: newName });
+        console.log(body);
+        xhr.send(body);
     }
 
     componentDidMount() {

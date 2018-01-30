@@ -1,24 +1,37 @@
 import axios from 'axios';
 
 const authentication = {
-   isAuthenticated: false,
-   authenticate(username, password, callback, errorCallback) {
-        axios.defaults.headers.common['Authorization'] = 'Basic ' + btoa(username + ":" + password);
-
-        axios.post('http://127.0.0.1:5000/login').then((response) => {
+    isAuthenticated: true,
+    authenticate(username, password, callback, wrongCredentialsCallback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:5000/login');
+        xhr.withCredentials = true;
+        xhr.setRequestHeader('Authorization', 'Basic ' + btoa(username + ":" + password));
+        xhr.addEventListener('load', (response) => {
+            if (xhr.status === 200) {
                 this.isAuthenticated = true;
                 callback();
-            }).catch((error) => {
-                if (error.response.status === 400) {
-                    errorCallback();
-                }
-            });
-   },
-   signOut(callback) {
-      this.isAuthenticated = false;
-      setTimeout(callback, 100);
-   },
-   register(username, password, callback, errorCallback) {
+            } else if (xhr.status === 400) {
+                wrongCredentialsCallback()
+            }
+        });
+        xhr.send();
+    },
+
+    signOut(callback, errorCallback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:5000/logout');
+        xhr.withCredentials = true;
+        xhr.addEventListener('load', (response) => {
+            this.isAuthenticated = false;
+            callback();
+        });
+        xhr.addEventListener('error', (error) => {
+            errorCallback();
+        })
+        xhr.send();
+    },
+    register(username, password, callback, errorCallback) {
         axios.post('http://127.0.0.1:5000/register', {}, {
                 auth: {
                     username: username,

@@ -1,3 +1,4 @@
+from flask import session
 from flask_restful import reqparse, Resource
 import base64
 from data_access.user import (
@@ -11,6 +12,7 @@ from passlib.hash import pbkdf2_sha256
 
 parser = reqparse.RequestParser()
 parser.add_argument('Authorization', location='headers')
+parser.add_argument('Cookie', location='headers')
 parser.add_argument('name')
 
 
@@ -32,10 +34,19 @@ class AuthenticationResource(Resource):
         password_is_correct = pbkdf2_sha256.verify(password, hash)
 
         if password_is_correct:
+            session['user'] = username
+            print(session)
+
             return '', 200
         else:
             return '', 400
 
+class LogoutResource(Resource):
+    def post(self):
+        if 'user' in session:
+            session.pop('user')
+
+        return '', 200
 
 class RegisterResource(Resource):
     def post(self):
@@ -59,33 +70,22 @@ class RegisterResource(Resource):
 
 class ProfileResource(Resource):
     def get(self):
+        if 'user' not in session:
+            return '', 401
+
         args = parser.parse_args()
-        credentials_as_bytestring = base64.b64decode(args['Authorization'][6:])
-        credentials = credentials_as_bytestring.decode('utf-8')
-        colon_position = credentials.find(':')
 
-        username = credentials[:colon_position]
-        password = credentials[colon_position+1:]
-
-        hash = get_password_hash(username)
-        password_is_correct = pbkdf2_sha256.verify(password, hash)
-
-        if password_is_correct:
-            return get_username_name(username)
+        return get_username_name(session['user'])
 
     def post(self):
         args = parser.parse_args()
         print(args)
 
-        credentials_as_bytestring = base64.b64decode(args['Authorization'][6:])
-        credentials = credentials_as_bytestring.decode('utf-8')
-        colon_position = credentials.find(':')
+        if 'user' not in session:
+            return '', 401
 
-        username = credentials[:colon_position]
-        password = credentials[colon_position+1:]
-
-        hash = get_password_hash(username)
-        password_is_correct = pbkdf2_sha256.verify(password, hash)
-
-        if password_is_correct:
-            return set_username_name(username, args['name'])
+        try:
+            set_username_name(session['user'], args['name'])
+            return args['name'], 200
+        except:
+            return '', 400

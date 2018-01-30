@@ -24,6 +24,7 @@ class Login extends React.Component {
                 }))
             },
             () => {
+                authentication.isAuthenticated = false;
                 this.setState(() => ({
                     incorrectCredentials: true
                 }))
