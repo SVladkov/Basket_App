@@ -49,7 +49,6 @@ const authentication = {
             }
         }).then(response => {
             if (response.status === 200) {
-                this.isAuthenticated = true;
                 callback.onStatus200();
             } else if (response.status === 409) {
                 callback.onStatus409();
