@@ -2,19 +2,23 @@ import axios from 'axios';
 
 const authentication = {
     isAuthenticated: true,
-    authenticate(username, password, callback, wrongCredentialsCallback) {
+    authenticate(username, password, callbacks) {
         var xhr = new XMLHttpRequest();
+
         xhr.open('POST', 'http://localhost:5000/login');
         xhr.withCredentials = true;
         xhr.setRequestHeader('Authorization', 'Basic ' + btoa(username + ":" + password));
         xhr.addEventListener('load', (response) => {
             if (xhr.status === 200) {
                 this.isAuthenticated = true;
-                callback();
+                callbacks.onStatus200();
+            } else if (xhr.status === 401) {
+                callbacks.onStatus401();
             } else if (xhr.status === 400) {
-                wrongCredentialsCallback()
+                callbacks.onStatus400();
             }
         });
+
         xhr.send();
     },
 

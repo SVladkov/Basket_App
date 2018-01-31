@@ -17,17 +17,22 @@ class Login extends React.Component {
         authentication.authenticate(
             this.state.username,
             this.state.password,
-            () => {
-                this.setState(() => ({
-                    redirectToReferrer: true,
-                    incorrectCredentials: false
-                }))
-            },
-            () => {
-                authentication.isAuthenticated = false;
-                this.setState(() => ({
-                    incorrectCredentials: true
-                }))
+            {
+                onStatus200: () => {
+                    this.setState(() => ({
+                        redirectToReferrer: true,
+                        incorrectCredentials: false
+                    }))
+                },
+                onStatus400: () => {
+                    console.log('Already logged in')
+                },
+                onStatus401: () => {
+                    authentication.isAuthenticated = false;
+                    this.setState(() => ({
+                        incorrectCredentials: true
+                    }))
+                }
             })
     }
 

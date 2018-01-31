@@ -6,13 +6,13 @@ class MatchData extends React.Component {
         var match = this.props.match
 
         return (<tr>
-            <td className="logo"><img className="logo" src={match.first_team.logo}/></td>
+            <td className="logo"><img className="logo" src={match.first_team.logo} alt="" /></td>
             <td className="">{match.first_team.name}</td>
             <td>{match.first_team.score}</td>
             <td>:</td>
             <td>{match.second_team.score}</td>
             <td className="">{match.second_team.name}</td>
-            <td className="logo"><img className="logo" src={match.second_team.logo}/></td>
+            <td className="logo"><img className="logo" src={match.second_team.logo} alt="" /></td>
         </tr>)
     }
 }
