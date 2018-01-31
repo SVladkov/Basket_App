@@ -21,43 +21,47 @@ class MyProfile extends React.Component {
     }
 
     getName() {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'http://localhost:5000/profile');
-        xhr.withCredentials = true;
-        xhr.addEventListener('load', (response) => {
-            if (xhr.status === 200) {
-                this.setState(() => ({
-                    name: xhr.response
-                }))
-            } else if (xhr.status === 401) {
+        fetch('http://localhost:5000/profile', {
+            method: 'GET',
+            credentials: 'include'
+        }).then(response => {
+            if (response.status === 200) {
+                response.json().then(name => {
+                    this.setState(() => ({
+                        name: name
+                    }))
+                })
+            } else if (response.status === 401) {
                 authentication.isAuthenticated = false;
                 this.setState(() => ({
                     redirectToLogin: true
                 }))
             }
-        });
-        xhr.send();
+        })
     }
 
     setName = () => {
         var newName = this.state.newName;
 
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:5000/profile');
-        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
-        xhr.withCredentials = true;
-        xhr.addEventListener('load', (response) => {
-            if (xhr.status === 200) {
-                this.setState(() => ({
-                    name: xhr.response
-                }))
-            } else if (xhr.status === 401) {
+        fetch('http://localhost:5000/profile', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            body: JSON.stringify({ name: newName })
+        }).then(response => {
+            if (response.status === 200) {
+                response.json().then(name => {
+                    this.setState(() => ({
+                        name: name,
+                        newName: ''
+                    }))
+                })
+            } else if (response.status === 401) {
                 authentication.isAuthenticated = false;
             }
-        });
-        var body = JSON.stringify({ name: newName });
-        console.log(body);
-        xhr.send(body);
+        })
     }
 
     componentDidMount() {

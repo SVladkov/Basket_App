@@ -72,7 +72,6 @@ class ProfileResource(Resource):
 
     def post(self):
         args = parser.parse_args()
-        print(args)
 
         if 'user' not in session:
             return '', 401

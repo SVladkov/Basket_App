@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 
 class MatchData extends React.Component {
     render() {
@@ -21,19 +20,27 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            matches: null
+            matches: null,
+            noMatchesData: false
         }
     }
 
     getScores() {
-        axios.get('http://127.0.0.1:5000/yesterday-matches')
-            .then((response) => {
+        fetch('http://127.0.0.1:5000/yesterday-matches', {
+            method: 'GET'
+        }).then(response => {
+            if (response.status === 200) {
+                response.json().then(matches => {
+                    this.setState(() => ({
+                        matches: matches
+                    }))
+                })
+            } else if (response.status === 204) {
                 this.setState(() => ({
-                    matches: response
+                    noMatchesData: true
                 }))
-            }).catch((error) => {
-                console.log(error);
-            });
+            }
+        })
     }
 
     componentDidMount() {
@@ -43,18 +50,16 @@ class Home extends React.Component {
     render() {
         var rows = [];
         if (this.state.matches !== null) {
-            for (var match of this.state.matches.data) {
+            for (var match of this.state.matches) {
                 rows.push(<MatchData match={match} />);
             }
 
             return <div><table><tbody className="center">{rows}</tbody></table></div>
+        } else if (this.state.noMatchesData) {
+            return <h2 className="center">Could not load any matches data.</h2>
+        } else {
+            return <h2 className="center">Loading scores...</h2>
         }
-
-        return (
-            <div>
-                <h2 className="center">Loading scores...</h2>
-            </div>
-        );
    }
 }
 export default Home;

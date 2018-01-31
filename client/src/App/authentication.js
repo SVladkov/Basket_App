@@ -1,70 +1,60 @@
-import axios from 'axios';
-
 const authentication = {
     isAuthenticated: true,
     authenticateSession() {
-        var xhr = new XMLHttpRequest();
-
-        xhr.open('GET', 'http://localhost:5000/authenticate-session');
-        xhr.withCredentials = true;
-        xhr.addEventListener('load', (response) => {
-            if (xhr.status === 200) {
+        fetch('http://localhost:5000/authenticate-session', {
+            method: 'GET',
+            credentials: 'include'
+        }).then(response => {
+            if (response.status === 200) {
                 this.isAuthenticated = true;
-            } else if (xhr.status === 401) {
+            } else if (response.status === 401) {
                 this.isAuthenticated = false;
             }
-        })
-
-        xhr.send()
+        });
     },
     authenticate(username, password, callbacks) {
-        var xhr = new XMLHttpRequest();
-
-        xhr.open('POST', 'http://localhost:5000/login');
-        xhr.withCredentials = true;
-        xhr.setRequestHeader('Authorization', 'Basic ' + btoa(username + ":" + password));
-        xhr.addEventListener('load', (response) => {
-            if (xhr.status === 200) {
+        fetch('http://localhost:5000/login', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Basic ' + btoa(username + ":" + password)
+            }
+        }).then(response => {
+            if (response.status === 200) {
                 this.isAuthenticated = true;
                 callbacks.onStatus200();
-            } else if (xhr.status === 401) {
+            } else if (response.status === 401) {
                 callbacks.onStatus401();
-            } else if (xhr.status === 400) {
+            } else if (response.status === 400) {
                 callbacks.onStatus400();
             }
         });
-
-        xhr.send();
     },
     signOut(callback, errorCallback) {
-        var xhr = new XMLHttpRequest();
-
-        xhr.open('POST', 'http://localhost:5000/logout');
-        xhr.withCredentials = true;
-        xhr.addEventListener('load', (response) => {
+        fetch('http://localhost:5000/logout', {
+            method: 'POST',
+            credentials: 'include',
+        }).then(response => {
             this.isAuthenticated = false;
             callback();
         });
-        xhr.addEventListener('error', (error) => {
-            errorCallback();
-        })
-
-        xhr.send();
     },
     register(username, password, callback, errorCallback) {
-        axios.post('http://127.0.0.1:5000/register', {}, {
-                auth: {
-                    username: username,
-                    password: password
-                }
-            }).then((response) => {
+        fetch('http://127.0.0.1:5000/register', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Basic ' + btoa(username + ":" + password)
+            }
+        }).then(response => {
+            if (response.status === 200) {
                 this.isAuthenticated = true;
-                callback();
-            }).catch((error) => {
-                if (error.response.status === 409) {
-                    errorCallback();
-                }
-            });
+                callback.onStatus200();
+            } else if (response.status === 409) {
+                callback.onStatus409();
+            } else if (response.status === 401) {
+                callback.onStatus401();
+            }
+        });
    }
 }
 

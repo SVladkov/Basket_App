@@ -16,17 +16,20 @@ class Register extends React.Component {
         authentication.register(
             this.state.username,
             this.state.password,
-            () => {
-                this.setState(() => ({
-                    redirectToReferrer: true,
-                    usernameExists: false
-                }))
-            },
-            () => {
-                this.setState(() => ({
-                    usernameExists: true
-                }))
-            })
+            {
+                onStatus200: () => {
+                    this.setState(() => ({
+                        redirectToReferrer: true,
+                        usernameExists: false
+                    }))
+                },
+                onStatus409: () => {
+                    this.setState(() => ({
+                        usernameExists: true
+                    }))
+                }
+            }
+        )
     }
 
     render() {
