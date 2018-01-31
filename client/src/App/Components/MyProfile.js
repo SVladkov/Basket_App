@@ -3,6 +3,7 @@ import {
     withRouter
 } from 'react-router-dom'
 import authentication from '../authentication';
+import configurations from '../../configurations';
 
 const SignOutButton = withRouter(({ history }) => (
     authentication.isAuthenticated === true
@@ -21,7 +22,7 @@ class MyProfile extends React.Component {
     }
 
     getName() {
-        fetch('http://localhost:5000/profile', {
+        fetch(configurations.SERVER_BASE_URL + '/profile', {
             method: 'GET',
             credentials: 'include'
         }).then(response => {
@@ -43,7 +44,7 @@ class MyProfile extends React.Component {
     setName = () => {
         var newName = this.state.newName;
 
-        fetch('http://localhost:5000/profile', {
+        fetch(configurations.SERVER_BASE_URL + '/profile', {
             method: 'POST',
             credentials: 'include',
             headers: {

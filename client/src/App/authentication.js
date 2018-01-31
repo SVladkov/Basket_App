@@ -1,7 +1,9 @@
+import configurations from '../configurations';
+
 const authentication = {
     isAuthenticated: true,
     authenticateSession() {
-        fetch('http://localhost:5000/authenticate-session', {
+        fetch(configurations.SERVER_BASE_URL + '/authenticate-session', {
             method: 'GET',
             credentials: 'include'
         }).then(response => {
@@ -13,7 +15,7 @@ const authentication = {
         });
     },
     authenticate(username, password, callbacks) {
-        fetch('http://localhost:5000/login', {
+        fetch(configurations.SERVER_BASE_URL + '/login', {
             method: 'POST',
             credentials: 'include',
             headers: {
@@ -31,7 +33,7 @@ const authentication = {
         });
     },
     signOut(callback, errorCallback) {
-        fetch('http://localhost:5000/logout', {
+        fetch(configurations.SERVER_BASE_URL + '/logout', {
             method: 'POST',
             credentials: 'include',
         }).then(response => {
@@ -40,7 +42,7 @@ const authentication = {
         });
     },
     register(username, password, callback, errorCallback) {
-        fetch('http://127.0.0.1:5000/register', {
+        fetch(configurations.SERVER_BASE_URL + '/register', {
             method: 'POST',
             headers: {
                 'Authorization': 'Basic ' + btoa(username + ":" + password)
