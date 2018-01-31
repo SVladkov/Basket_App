@@ -1,5 +1,6 @@
 from resources.users import (
     AuthenticationResource,
+    SessionAuthenticationResource,
     LogoutResource,
     RegisterResource,
     ProfileResource
@@ -10,6 +11,7 @@ from basketball_apis.fantasydata_api import FantasydataApi
 class Routing():
     def add_resources(api):
         api.add_resource(AuthenticationResource, '/login')
+        api.add_resource(SessionAuthenticationResource, '/authenticate-session')
         api.add_resource(LogoutResource, '/logout')
         api.add_resource(RegisterResource, '/register')
         api.add_resource(ProfileResource, '/profile')

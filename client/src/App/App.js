@@ -10,8 +10,14 @@ import Register from './Components/Register';
 import PrivateRoute from './Components/PrivateRoute';
 import MyProfile from './Components/MyProfile';
 import '../index.css'
+import authentication from './authentication';
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+        authentication.authenticateSession();
+    }
+
    render() {
       return (
          <Router>

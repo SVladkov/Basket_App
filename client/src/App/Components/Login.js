@@ -46,6 +46,12 @@ class Login extends React.Component {
             )
         }
 
+        if (authentication.isAuthenticated) {
+            return (
+                <Redirect to='/home' />
+            )
+        }
+
         return (
             <div className="login-register-form">
                 <input value={this.state.username} onChange={event => this.updateUsernameValue(event)} />

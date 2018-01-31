@@ -2,6 +2,21 @@ import axios from 'axios';
 
 const authentication = {
     isAuthenticated: true,
+    authenticateSession() {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('GET', 'http://localhost:5000/authenticate-session');
+        xhr.withCredentials = true;
+        xhr.addEventListener('load', (response) => {
+            if (xhr.status === 200) {
+                this.isAuthenticated = true;
+            } else if (xhr.status === 401) {
+                this.isAuthenticated = false;
+            }
+        })
+
+        xhr.send()
+    },
     authenticate(username, password, callbacks) {
         var xhr = new XMLHttpRequest();
 
@@ -21,9 +36,9 @@ const authentication = {
 
         xhr.send();
     },
-
     signOut(callback, errorCallback) {
         var xhr = new XMLHttpRequest();
+
         xhr.open('POST', 'http://localhost:5000/logout');
         xhr.withCredentials = true;
         xhr.addEventListener('load', (response) => {
@@ -33,6 +48,7 @@ const authentication = {
         xhr.addEventListener('error', (error) => {
             errorCallback();
         })
+
         xhr.send();
     },
     register(username, password, callback, errorCallback) {

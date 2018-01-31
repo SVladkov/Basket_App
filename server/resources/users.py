@@ -31,6 +31,13 @@ class AuthenticationResource(Resource):
         else:
             return '', 401
 
+class SessionAuthenticationResource(Resource):
+    def get(self):
+        if 'user' in session:
+            return '', 200
+        else:
+            return '', 401
+
 class LogoutResource(Resource):
     def post(self):
         if 'user' in session:
